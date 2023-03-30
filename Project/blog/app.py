@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask import request, g
 from werkzeug.exceptions import BadRequest
+from blog.views.users import users_app
 
 app = Flask(__name__)
 
@@ -84,3 +85,5 @@ def process_after_request(response):
     
     return response
 
+
+app.register_blueprint(users_app, url_prefix="/users")
