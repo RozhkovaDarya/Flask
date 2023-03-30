@@ -12,6 +12,9 @@ USERS = {
 def users_list():
     return render_template("users/list.html", users=USERS)
 
+@users_app.route("/", endpoint="list")
+
+@users_app.route("/<int:user_id>/", endpoint="details")
 
 @users_app.route("/<int:user_id>/")
 def user_details(user_id: int):
