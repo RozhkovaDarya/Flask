@@ -7,3 +7,5 @@
 {% block body %}
     <h1>Hello index page!</h1>
 {% endblock %}
+
+{% for (endpoint, label) in [('users_app.list', 'Users'), ('articles_app.list', 'Articles')] %}
