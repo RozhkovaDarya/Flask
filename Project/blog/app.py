@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask import request, g
 from werkzeug.exceptions import BadRequest
 
@@ -7,11 +7,12 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return "Hello web!"
+    return render_template("index.html")
 
 @app.route("/greet/<name>/")
 def greet_name(name: str):
     return f"Hello {name}!"
+
 
 @app.route("/user/")
 def read_user():
