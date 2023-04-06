@@ -10,3 +10,5 @@ class User(db.Model, UserMixin):
     
     def __repr__(self):
         return f"<User #{self.id} {self.username!r}>"
+
+email = Column(String(255), nullable=False, default="", server_default="")

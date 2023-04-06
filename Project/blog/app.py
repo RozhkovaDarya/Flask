@@ -8,7 +8,7 @@ from blog.views.auth import login_manager, auth_app
 import os
 from flask_migrate import Migrate
 
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, compare_type=True)
 
 app = Flask(__name__)
 
