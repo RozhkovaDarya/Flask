@@ -6,6 +6,9 @@ from blog.views.articles import articles_app
 from blog.models.database import db
 from blog.views.auth import login_manager, auth_app
 import os
+from flask_migrate import Migrate
+
+migrate = Migrate(app, db)
 
 app = Flask(__name__)
 
