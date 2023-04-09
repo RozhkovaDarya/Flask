@@ -4,7 +4,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from sqlalchemy.exc import IntegrityError
 from blog.models.database import db
 from blog.models import User
-from blog.forms.user import RegistrationForm
+from blog.forms.user import RegistrationForm, LoginForm
 from werkzeug.exceptions import NotFound
 
 auth_app = Blueprint("auth_app", __name__)
@@ -30,13 +30,22 @@ __all__ = [
 
 
 def login():
-    return "WIP"
-    # if request.method == "GET":
-    # return render_template("auth/login.html")
-    #
-    #
-    # login_user(user)
-    # return redirect(url_for("index"))
+    if current_user.is_authenticated:
+        return redirect("index")
+
+    form = LoginForm(request.form)
+
+    if request.method == "POST" and form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).one_or_none()
+        if user is None:
+            return render_template("auth/login.html", form=form, error="username doesn't exist")
+        if not user.validate_password(form.password.data):
+            return render_template("auth/login.html", form=form, error="invalid username or password")
+
+        login_user(user)
+        return redirect(url_for("index"))
+
+    return render_template("auth/login.html", form=form)
 
 
 @auth_app.route("/login-as/", methods=["GET", "POST"], endpoint="login-as")
