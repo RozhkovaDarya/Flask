@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from blog.models.database import db
 from blog.models import User
 from blog.forms.user import RegistrationForm
+from werkzeug.exceptions import NotFound
 
 auth_app = Blueprint("auth_app", __name__)
 
@@ -26,6 +27,23 @@ __all__ = [
     "login_manager",
     "auth_app",
 ]
+
+
+def login():
+    return "WIP"
+    # if request.method == "GET":
+    # return render_template("auth/login.html")
+    #
+    #
+    # login_user(user)
+    # return redirect(url_for("index"))
+
+
+@auth_app.route("/login-as/", methods=["GET", "POST"], endpoint="login-as")
+def login_as():
+    if not (current_user.is_authenticated and current_user.is_staff):
+        # non-admin users should not know about this feature
+        raise NotFound
 
 
 @auth_app.route("/login/", methods=["GET", "POST"], endpoint="login")
