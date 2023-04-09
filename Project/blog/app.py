@@ -97,14 +97,22 @@ def process_after_request(response):
     return response
 
 
-@app.cli.command("init-db")
-def init_db():
+@app.cli.command("create-admin")
+def create_admin():
     """
     Run in your terminal:
-    flask init-db
+    ➜ flask create-admin
+    > created admin: <User #1 'admin'>
     """
-    db.create_all()
-    print("done!")
+    from blog.models import User
+
+    admin = User(username="admin", is_staff=True)
+    admin.password = os.environ.get("ADMIN_PASSWORD") or "adminpass"
+
+    db.session.add(admin)
+    db.session.commit()
+
+    print("created admin:", admin)
 
 
 @app.cli.command("create-users")
