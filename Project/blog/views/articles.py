@@ -18,7 +18,9 @@ def articles_list():
 
 @articles_app.route("/<int:article_id>/", endpoint="details")
 def article_detals(article_id):
-    article = Article.query.filter_by(id=article_id).one_or_none()
+    article = Article.query.filter_by(id=article_id).options(
+        joinedload(Article.tags) # подгружаем связанные теги!
+    ).one_or_none()
     if article is None:
         raise NotFound
     return render_template("articles/details.html", article=article)
@@ -29,7 +31,16 @@ def article_detals(article_id):
 def create_article():
     error = None
     form = CreateArticleForm(request.form)
+    
+    # добавляем доступные теги в форму
+    form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.order_by("name")]
     if request.method == "POST" and form.validate_on_submit():
+        if request.method == "POST" and form.validate_on_submit(): # при создании статьи
+            if form.tags.data: # если в форму были переданы теги (были выбраны)
+                selected_tags = Tag.query.filter(Tag.id.in_(form.tags.data))
+                for tag in selected_tags:
+                    article.tags.append(tag) # добавляем выбранные теги к статье
+        
         article = Article(title=form.title.data.strip(), body=form.body.data)
         db.session.add(article)
         if current_user.author:
