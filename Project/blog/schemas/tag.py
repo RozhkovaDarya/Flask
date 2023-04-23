@@ -1,5 +1,6 @@
 from marshmallow_jsonapi import Schema, fields
 
+
 class TagSchema(Schema):
     class Meta:
         type_ = "tag"
