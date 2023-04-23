@@ -10,15 +10,18 @@ from flask_migrate import Migrate
 from blog.security import flask_bcrypt
 from blog.views.authors import authors_app
 from blog.admin import admin
+from blog.api import init_api
 
+
+app = Flask(__name__)
+
+api = init_api(app)
 
 admin.init_app(app)
 
 flask_bcrypt.init_app(app)
 
 migrate = Migrate(app, db, compare_type=True)
-
-app = Flask(__name__)
 
 app.register_blueprint(authors_app, url_prefix="/authors")
 
