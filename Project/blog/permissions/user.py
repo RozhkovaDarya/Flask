@@ -33,4 +33,3 @@ class UserPermission(PermissionMixin):
 
         self.permission_for_get.allow_columns = (self.ALL_AVAILABLE_FIELDS, 10)
         return self.permission_for_get
-    
